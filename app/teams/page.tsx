@@ -80,6 +80,7 @@ export default function TeamsPage() {
           mouseStrength={0.3}
           pageLoadAnimation={true}
           brightness={0.8}
+          dpr={1}
         />
       </div>
       
