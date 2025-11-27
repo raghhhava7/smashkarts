@@ -159,17 +159,90 @@ export default function TeamsPage() {
       {isShuffling && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="text-center">
-            <div className="relative w-32 h-32 mx-auto mb-6">
-              <div className="absolute inset-0 border-4 border-purple-500/30 rounded-full"></div>
-              <div className="absolute inset-0 border-4 border-transparent border-t-purple-500 rounded-full animate-spin"></div>
-              <div className="absolute inset-2 border-4 border-transparent border-t-pink-500 rounded-full animate-spin" style={{ animationDuration: '0.8s', animationDirection: 'reverse' }}></div>
-              <div className="absolute inset-4 border-4 border-transparent border-t-cyan-500 rounded-full animate-spin" style={{ animationDuration: '0.6s' }}></div>
+            <div className="relative h-48 mb-8 flex items-center justify-center gap-8">
+              {/* Dice 1 */}
+              <div className="dice-container animate-dice-fall-1">
+                <div className="dice animate-dice-roll">
+                  <div className="dice-face dice-front bg-gradient-to-br from-purple-500 to-pink-500">
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-back bg-gradient-to-br from-purple-500 to-pink-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-right bg-gradient-to-br from-purple-500 to-pink-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-left bg-gradient-to-br from-purple-500 to-pink-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-top bg-gradient-to-br from-purple-500 to-pink-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-bottom bg-gradient-to-br from-purple-500 to-pink-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Dice 2 */}
+              <div className="dice-container animate-dice-fall-2">
+                <div className="dice animate-dice-roll-reverse">
+                  <div className="dice-face dice-front bg-gradient-to-br from-cyan-500 to-blue-500">
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-back bg-gradient-to-br from-cyan-500 to-blue-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-right bg-gradient-to-br from-cyan-500 to-blue-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-left bg-gradient-to-br from-cyan-500 to-blue-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-top bg-gradient-to-br from-cyan-500 to-blue-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                  <div className="dice-face dice-bottom bg-gradient-to-br from-cyan-500 to-blue-500">
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                    <div className="dice-dot"></div>
+                  </div>
+                </div>
+              </div>
             </div>
             <h2 className="font-orbitron text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent glow-text mb-2">
               SHUFFLING TEAMS
             </h2>
             <p className="font-rajdhani text-purple-300 text-sm sm:text-base animate-pulse">
-              Randomizing assignments...
+              Rolling the dice...
             </p>
           </div>
         </div>
