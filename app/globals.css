@@ -26,6 +26,28 @@
   .font-gaming {
     font-family: var(--font-orbitron);
   }
+  
+  @keyframes jump-left {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(-30px) translateY(-20px); }
+    50% { transform: translateX(-60px) translateY(0); }
+    75% { transform: translateX(-30px) translateY(-10px); }
+  }
+  
+  @keyframes jump-right {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(30px) translateY(-20px); }
+    50% { transform: translateX(60px) translateY(0); }
+    75% { transform: translateX(30px) translateY(-10px); }
+  }
+  
+  .animate-jump-left {
+    animation: jump-left 0.8s ease-in-out;
+  }
+  
+  .animate-jump-right {
+    animation: jump-right 0.8s ease-in-out;
+  }
 }
 
 

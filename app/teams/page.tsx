@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import TeamCard from "@/components/TeamCard";
 import AddMemberDialog from "@/components/AddMemberDialog";
-import FaultyTerminal from "@/components/FaultyTerminal";
+import LetterGlitch from "@/components/LetterGlitch";
 import { Member } from "@/types";
 
 const DEFAULT_MEMBERS: Member[] = [
@@ -22,6 +22,7 @@ export default function TeamsPage() {
   const [teamB, setTeamB] = useState<Member[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const shuffleTeams = () => {
     const shuffled = [...members].sort(() => Math.random() - 0.5);
@@ -33,8 +34,14 @@ export default function TeamsPage() {
   const handleShuffle = () => {
     setIsShuffling(true);
     setTimeout(() => {
-      shuffleTeams();
       setIsShuffling(false);
+      setIsAnimating(true);
+      setTimeout(() => {
+        shuffleTeams();
+        setTimeout(() => {
+          setIsAnimating(false);
+        }, 800);
+      }, 100);
     }, 3000);
   };
 
@@ -63,24 +70,13 @@ export default function TeamsPage() {
   return (
     <div className="min-h-screen relative overflow-hidden p-4 sm:p-6 md:p-8">
       <div className="absolute inset-0 bg-black">
-        <FaultyTerminal
-          scale={1.2}
-          gridMul={[2, 1]}
-          digitSize={1.5}
-          timeScale={0.3}
-          scanlineIntensity={0.3}
-          glitchAmount={1}
-          flickerAmount={0.8}
-          noiseAmp={1}
-          chromaticAberration={2}
-          dither={0.5}
-          curvature={0.15}
-          tint="#8b5cf6"
-          mouseReact={true}
-          mouseStrength={0.3}
-          pageLoadAnimation={true}
-          brightness={0.8}
-          dpr={1}
+        <LetterGlitch
+          glitchColors={['#8b5cf6', '#ec4899', '#22d3ee']}
+          glitchSpeed={50}
+          centerVignette={false}
+          outerVignette={true}
+          smooth={true}
+          characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?"
         />
       </div>
       
@@ -110,18 +106,22 @@ export default function TeamsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 px-4">
-          <TeamCard
-            teamName="TEAM A"
-            members={teamA}
-            color="cyan"
-            onUpdateMember={handleUpdateMember}
-          />
-          <TeamCard
-            teamName="TEAM B"
-            members={teamB}
-            color="pink"
-            onUpdateMember={handleUpdateMember}
-          />
+          <div className={`transition-all duration-700 ${isAnimating ? 'opacity-0 scale-95 translate-x-10' : 'opacity-100 scale-100 translate-x-0'}`}>
+            <TeamCard
+              teamName="TEAM A"
+              members={teamA}
+              color="cyan"
+              onUpdateMember={handleUpdateMember}
+            />
+          </div>
+          <div className={`transition-all duration-700 ${isAnimating ? 'opacity-0 scale-95 -translate-x-10' : 'opacity-100 scale-100 translate-x-0'}`}>
+            <TeamCard
+              teamName="TEAM B"
+              members={teamB}
+              color="pink"
+              onUpdateMember={handleUpdateMember}
+            />
+          </div>
         </div>
 
         <div className="mt-6 sm:mt-8 text-center text-slate-400 text-sm sm:text-base px-4">
