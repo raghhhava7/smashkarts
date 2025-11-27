@@ -9,9 +9,11 @@ interface TeamCardProps {
   members: Member[];
   color: "cyan" | "pink";
   onUpdateMember: (id: string, newName: string) => void;
+  movingMembers?: {id: string, fromTeam: 'A' | 'B', toTeam: 'A' | 'B'}[];
+  teamId: 'A' | 'B';
 }
 
-export default function TeamCard({ teamName, members, color, onUpdateMember }: TeamCardProps) {
+export default function TeamCard({ teamName, members, color, onUpdateMember, movingMembers = [], teamId }: TeamCardProps) {
   const glowClass = color === "cyan" ? "glow-box-cyan" : "glow-box-pink";
   const borderColor = color === "cyan" ? "border-cyan-500/50" : "border-pink-500/50";
   const gradientClass = color === "cyan" 
@@ -28,14 +30,34 @@ export default function TeamCard({ teamName, members, color, onUpdateMember }: T
         {members.length === 0 ? (
           <p className="text-center text-slate-500 py-6 sm:py-8 text-sm sm:text-base">No members assigned</p>
         ) : (
-          members.map((member) => (
-            <MemberItem
-              key={member.id}
-              member={member}
-              color={color}
-              onUpdateName={(newName) => onUpdateMember(member.id, newName)}
-            />
-          ))
+          members.map((member) => {
+            const isMoving = movingMembers.find(m => m.id === member.id);
+            const isLeavingThisTeam = isMoving && isMoving.fromTeam === teamId;
+            const isJoiningThisTeam = isMoving && isMoving.toTeam === teamId;
+            
+            return (
+              <div
+                key={member.id}
+                className={`transition-all duration-1000 ${
+                  isLeavingThisTeam 
+                    ? teamId === 'A' 
+                      ? 'animate-walk-right opacity-0' 
+                      : 'animate-walk-left opacity-0'
+                    : isJoiningThisTeam
+                    ? teamId === 'A'
+                      ? 'animate-walk-from-right'
+                      : 'animate-walk-from-left'
+                    : ''
+                }`}
+              >
+                <MemberItem
+                  member={member}
+                  color={color}
+                  onUpdateName={(newName) => onUpdateMember(member.id, newName)}
+                />
+              </div>
+            );
+          })
         )}
       </div>
       

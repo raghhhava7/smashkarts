@@ -22,7 +22,7 @@ export default function TeamsPage() {
   const [teamB, setTeamB] = useState<Member[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [movingMembers, setMovingMembers] = useState<{id: string, fromTeam: 'A' | 'B', toTeam: 'A' | 'B'}[]>([]);
 
   const shuffleTeams = () => {
     const shuffled = [...members].sort(() => Math.random() - 0.5);
@@ -35,12 +35,39 @@ export default function TeamsPage() {
     setIsShuffling(true);
     setTimeout(() => {
       setIsShuffling(false);
-      setIsAnimating(true);
+      
+      // Calculate new teams
+      const shuffled = [...members].sort(() => Math.random() - 0.5);
+      const mid = Math.ceil(shuffled.length / 2);
+      const newTeamA = shuffled.slice(0, mid);
+      const newTeamB = shuffled.slice(mid);
+      
+      // Find members that are moving
+      const moving: {id: string, fromTeam: 'A' | 'B', toTeam: 'A' | 'B'}[] = [];
+      
+      newTeamA.forEach(member => {
+        const wasInTeamB = teamB.some(m => m.id === member.id);
+        if (wasInTeamB) {
+          moving.push({ id: member.id, fromTeam: 'B', toTeam: 'A' });
+        }
+      });
+      
+      newTeamB.forEach(member => {
+        const wasInTeamA = teamA.some(m => m.id === member.id);
+        if (wasInTeamA) {
+          moving.push({ id: member.id, fromTeam: 'A', toTeam: 'B' });
+        }
+      });
+      
+      setMovingMembers(moving);
+      
+      // Apply shuffle after animation
       setTimeout(() => {
-        shuffleTeams();
+        setTeamA(newTeamA);
+        setTeamB(newTeamB);
         setTimeout(() => {
-          setIsAnimating(false);
-        }, 800);
+          setMovingMembers([]);
+        }, 1500);
       }, 100);
     }, 3000);
   };
@@ -82,10 +109,10 @@ export default function TeamsPage() {
       
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-8 sm:mb-12 px-4">
-          <h1 className="font-orbitron text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent glow-text">
+          <h1 className="font-orbitron text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 text-white glow-text" style={{ textShadow: '0 0 20px #fff, 0 0 40px #fff, 0 0 60px #8b5cf6, 0 0 80px #8b5cf6' }}>
             TEAM ASSIGNER
           </h1>
-          <p className="font-rajdhani text-purple-300 text-sm sm:text-base md:text-lg">Randomly split your squad into balanced teams</p>
+          <p className="font-rajdhani text-white text-sm sm:text-base md:text-lg" style={{ textShadow: '0 0 10px #fff, 0 0 20px #fff' }}>Randomly split your squad into balanced teams</p>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-4">
@@ -106,22 +133,22 @@ export default function TeamsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 px-4">
-          <div className={`transition-all duration-700 ${isAnimating ? 'opacity-0 scale-95 translate-x-10' : 'opacity-100 scale-100 translate-x-0'}`}>
-            <TeamCard
-              teamName="TEAM A"
-              members={teamA}
-              color="cyan"
-              onUpdateMember={handleUpdateMember}
-            />
-          </div>
-          <div className={`transition-all duration-700 ${isAnimating ? 'opacity-0 scale-95 -translate-x-10' : 'opacity-100 scale-100 translate-x-0'}`}>
-            <TeamCard
-              teamName="TEAM B"
-              members={teamB}
-              color="pink"
-              onUpdateMember={handleUpdateMember}
-            />
-          </div>
+          <TeamCard
+            teamName="TEAM A"
+            members={teamA}
+            color="cyan"
+            onUpdateMember={handleUpdateMember}
+            movingMembers={movingMembers}
+            teamId="A"
+          />
+          <TeamCard
+            teamName="TEAM B"
+            members={teamB}
+            color="pink"
+            onUpdateMember={handleUpdateMember}
+            movingMembers={movingMembers}
+            teamId="B"
+          />
         </div>
 
         <div className="mt-6 sm:mt-8 text-center text-slate-400 text-sm sm:text-base px-4">
