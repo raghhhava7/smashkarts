@@ -10,9 +10,10 @@ interface MemberItemProps {
   member: Member;
   color: "cyan" | "pink";
   onUpdateName: (newName: string) => void;
+  onDelete: () => void;
 }
 
-export default function MemberItem({ member, color, onUpdateName }: MemberItemProps) {
+export default function MemberItem({ member, color, onUpdateName, onDelete }: MemberItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(member.name);
 
@@ -72,14 +73,24 @@ export default function MemberItem({ member, color, onUpdateName }: MemberItemPr
       ) : (
         <>
           <span className="flex-1 text-white font-medium text-sm sm:text-base truncate">{member.name}</span>
-          <Button
-            onClick={() => setIsEditing(true)}
-            size="sm"
-            variant="ghost"
-            className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/20 text-xs sm:text-sm flex-shrink-0"
-          >
-            Edit
-          </Button>
+          <div className="flex gap-1 flex-shrink-0">
+            <Button
+              onClick={() => setIsEditing(true)}
+              size="sm"
+              variant="ghost"
+              className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/20 text-xs sm:text-sm"
+            >
+              Edit
+            </Button>
+            <Button
+              onClick={onDelete}
+              size="sm"
+              variant="ghost"
+              className="text-red-400 hover:text-red-300 hover:bg-red-500/20 text-xs sm:text-sm"
+            >
+              Delete
+            </Button>
+          </div>
         </>
       )}
     </div>

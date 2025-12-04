@@ -9,11 +9,12 @@ interface TeamCardProps {
   members: Member[];
   color: "cyan" | "pink";
   onUpdateMember: (id: string, newName: string) => void;
+  onDeleteMember: (id: string) => void;
   movingMembers?: {id: string, fromTeam: 'A' | 'B', toTeam: 'A' | 'B'}[];
   teamId: 'A' | 'B';
 }
 
-export default function TeamCard({ teamName, members, color, onUpdateMember, movingMembers = [], teamId }: TeamCardProps) {
+export default function TeamCard({ teamName, members, color, onUpdateMember, onDeleteMember, movingMembers = [], teamId }: TeamCardProps) {
   const glowClass = color === "cyan" ? "glow-box-cyan" : "glow-box-pink";
   const borderColor = color === "cyan" ? "border-cyan-500/50" : "border-pink-500/50";
   const gradientClass = color === "cyan" 
@@ -54,6 +55,7 @@ export default function TeamCard({ teamName, members, color, onUpdateMember, mov
                   member={member}
                   color={color}
                   onUpdateName={(newName) => onUpdateMember(member.id, newName)}
+                  onDelete={() => onDeleteMember(member.id)}
                 />
               </div>
             );
