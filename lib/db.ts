@@ -1,6 +1,20 @@
-import { neon } from '@neondatabase/serverless';
+import { neon, NeonQueryFunction } from '@neondatabase/serverless';
 
-const sql = neon(process.env.DATABASE_URL!);
+const getDatabaseUrl = () => {
+  const url = process.env.DATABASE_URL;
+  if (!url) {
+    throw new Error('DATABASE_URL environment variable is not set');
+  }
+  return url;
+};
+
+const sql: NeonQueryFunction<false, false> = (() => {
+  if (process.env.DATABASE_URL) {
+    return neon(process.env.DATABASE_URL);
+  }
+  // Return a dummy function during build time when DATABASE_URL is not available
+  return (() => Promise.resolve([])) as unknown as NeonQueryFunction<false, false>;
+})();
 
 export default sql;
 
